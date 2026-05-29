@@ -6,6 +6,7 @@ CONFIG -= qt
 SOURCES += \
     board.cpp \
         main.cpp \
+    piece.cpp
 
 INCLUDEPATH += "C:\SFML-2.5.1\include"
 LIBS += -L"C:\SFML-2.5.1\lib"
@@ -17,4 +18,5 @@ CONFIG(debug, debug|release){
 
 HEADERS += \
     Global_Values.h \
-    board.h
+    board.h \
+    piece.h

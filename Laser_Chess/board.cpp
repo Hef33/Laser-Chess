@@ -20,7 +20,8 @@ void Board::setupTiles()
             if ((x + y) % 2 == 0)
             {
                 tiles[x][y].setFillColor(sf::Color(240, 217, 181)); //Jasne pole
-            } else {
+            } else
+            {
                 tiles[x][y].setFillColor(sf::Color(181, 136, 99));  //Ciemne pole
             }
         }

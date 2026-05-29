@@ -1,10 +1,11 @@
 #pragma once
 
-enum class Direction{
-    North = 0, // Góra (Y maleje)
-    East = 1,  // Prawo (X rośnie)
-    South = 2, // Dół (Y rośnie)
-    West = 3   // Lewo (X maleje)
+enum class Direction
+{
+    North = 0, // Góra
+    East = 1,  // Prawo
+    South = 2, // Dół
+    West = 3   // Lewo
 };
 
 const float TILE_SIZE = 80.0f;
