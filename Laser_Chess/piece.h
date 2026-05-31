@@ -2,7 +2,9 @@
 #define PIECE_H
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "Global_Values.h"
+
 
 class Piece
 {
@@ -44,9 +46,9 @@ public:
             selected = !selected;
     }
 
-    void handle_event(const sf::Event& event);
+    void handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces);
     void update_sprite();
-    void move(Direction dir);
+    void move(Direction dir, const std::vector<Piece>& all_pieces);
     void rotate_right();
     void rotate_left();
 

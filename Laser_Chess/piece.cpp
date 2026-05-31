@@ -12,15 +12,28 @@ void Piece::update_sprite()
     piece_sprite.setRotation(rotationDegrees);
 }
 
-void Piece::move(Direction dir)
+void Piece::move(Direction dir, const std::vector<Piece>& all_pieces)
 {
+    int targetX = gridX; int targetY = gridY;
     switch(dir)
     {
-        case Direction::North: gridY -= 1;if (gridY <  0){gridY = 0;}break;
-        case Direction::East: gridX += 1;if (gridX > 7){gridX = 7;}break;
-        case Direction::South: gridY += 1;if (gridY > 7){gridY = 7;}break;
-        case Direction::West: gridX -= 1;if (gridX < 0){gridX = 0;}break;
+        case Direction::North: targetY -= 1;break;
+        case Direction::East: targetX += 1;break;
+        case Direction::South: targetY += 1;break;
+        case Direction::West: targetX -= 1;break;
     }
+    if(targetX<0||targetX>7||targetY<0||targetY>7) return;
+
+    for(const Piece& other : all_pieces)
+    {
+        if(&other != this && other.is_alive())
+        {
+            if(other.gridX == targetX && other.gridY == targetY)
+                return;
+        }
+    }
+    gridX = targetX;
+    gridY = targetY;
     update_sprite();
 }
 
@@ -41,7 +54,7 @@ void Piece::rotate_left()
     update_sprite();
 }
 
-void Piece::handle_event(const sf::Event& event)
+void Piece::handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces)
 {
         if (!is_alive()) return;
 
@@ -55,13 +68,14 @@ void Piece::handle_event(const sf::Event& event)
                 }
             }
 
-            else if(is_selected())
+            else if(event.type == sf::Event::KeyPressed)
                 {
-                // Ruch
-                if(event.key.code == sf::Keyboard::Up) {move(Direction::North);selected = !selected;}
-                if(event.key.code == sf::Keyboard::Right) {move(Direction::East);selected = !selected;}
-                if(event.key.code == sf::Keyboard::Down) {move(Direction::South);selected = !selected;}
-                if(event.key.code == sf::Keyboard::Left) {move(Direction::West); selected = !selected;}
+                    if(is_selected())
+                {// Ruch
+                if(event.key.code == sf::Keyboard::Up) {move(Direction::North,  all_pieces);selected = !selected;}
+                if(event.key.code == sf::Keyboard::Right) {move(Direction::East, all_pieces);selected = !selected;}
+                if(event.key.code == sf::Keyboard::Down) {move(Direction::South,all_pieces);selected = !selected;}
+                if(event.key.code == sf::Keyboard::Left) {move(Direction::West,all_pieces); selected = !selected;}
 
                 // Obracanie
                 if(event.key.code == sf::Keyboard::E) {rotate_right(); selected = !selected;}// Naciśnij 'E'
@@ -69,7 +83,7 @@ void Piece::handle_event(const sf::Event& event)
 
                 //zabicie pionka
                 if (event.key.code == sf::Keyboard::D) destroy();
-            }}
+                    }}}
 
 
 void Piece::draw(sf::RenderWindow& window) const {
