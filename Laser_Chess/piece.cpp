@@ -1,4 +1,5 @@
 #include "piece.h"
+#include <iostream>
 
 
 //aktualizacja sprite'a pionka
@@ -39,6 +40,37 @@ void Piece::rotate_left()
 
     update_sprite();
 }
+
+void Piece::handle_event(const sf::Event& event)
+{
+        if (!is_alive()) return;
+
+            if (event.type == sf::Event::MouseButtonPressed)
+                {
+                if(event.mouseButton.button == sf::Mouse::Left)
+                {
+                    float mouseX = static_cast<float>(event.mouseButton.x);
+                    float mouseY = static_cast<float>(event.mouseButton.y);
+                    check_click(mouseX, mouseY);
+                }
+            }
+
+            else if(is_selected())
+                {
+                // Ruch
+                if(event.key.code == sf::Keyboard::Up) {move(Direction::North);selected = !selected;}
+                if(event.key.code == sf::Keyboard::Right) {move(Direction::East);selected = !selected;}
+                if(event.key.code == sf::Keyboard::Down) {move(Direction::South);selected = !selected;}
+                if(event.key.code == sf::Keyboard::Left) {move(Direction::West); selected = !selected;}
+
+                // Obracanie
+                if(event.key.code == sf::Keyboard::E) {rotate_right(); selected = !selected;}// Naciśnij 'E'
+                if(event.key.code == sf::Keyboard::Q) {rotate_left(); selected = !selected;} // Naciśnij 'Q'
+
+                //zabicie pionka
+                if (event.key.code == sf::Keyboard::D) destroy();
+            }}
+
 
 void Piece::draw(sf::RenderWindow& window) const {
     window.draw(piece_sprite);

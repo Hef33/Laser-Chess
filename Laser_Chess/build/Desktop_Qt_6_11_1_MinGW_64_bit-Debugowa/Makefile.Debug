@@ -263,7 +263,8 @@ debug/main.o: ../../main.cpp C:/SFML-2.5.1/include/SFML/Graphics.hpp \
 		C:/SFML-2.5.1/include/SFML/Graphics/VertexBuffer.hpp \
 		../../board.h \
 		../../piece.h \
-		../../Global_Values.h
+		../../Global_Values.h \
+		../../textures.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\..\main.cpp
 
 debug/piece.o: ../../piece.cpp ../../piece.h \

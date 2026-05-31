@@ -9,6 +9,8 @@ class Piece
 public:
     int gridX, gridY; //położenie
     bool alive;//stan życia
+    bool selected = false;//stan wybrania przez gracza
+    const sf::RenderWindow* window;
     Direction faceing_direction; //kierunek patrzenia pionka
     sf::Sprite piece_sprite;
     Piece(int x, int y, sf::Texture& texture):gridX(x),gridY(y), faceing_direction(Direction::North), alive(true)
@@ -34,6 +36,15 @@ public:
     return alive;
     }
 
+    bool is_selected() const {
+        return selected;
+    }
+    void check_click(float mouseX, float mouseY) {
+        if (piece_sprite.getGlobalBounds().contains(mouseX, mouseY))
+            selected = !selected;
+    }
+
+    void handle_event(const sf::Event& event);
     void update_sprite();
     void move(Direction dir);
     void rotate_right();

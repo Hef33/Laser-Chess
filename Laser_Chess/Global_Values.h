@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 enum class Direction
 {
@@ -9,3 +10,4 @@ enum class Direction
 };
 
 const float TILE_SIZE = 80.0f;
+
