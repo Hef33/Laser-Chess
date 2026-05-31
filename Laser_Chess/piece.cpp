@@ -12,7 +12,7 @@ void Piece::update_sprite()
     piece_sprite.setRotation(rotationDegrees);
 }
 
-void Piece::move(Direction dir, const std::vector<Piece>& all_pieces)
+bool Piece::move(Direction dir, const std::vector<Piece>& all_pieces)
 {
     int targetX = gridX; int targetY = gridY;
     switch(dir)
@@ -22,19 +22,20 @@ void Piece::move(Direction dir, const std::vector<Piece>& all_pieces)
         case Direction::South: targetY += 1;break;
         case Direction::West: targetX -= 1;break;
     }
-    if(targetX<0||targetX>7||targetY<0||targetY>7) return;
+    if(targetX<0||targetX>7||targetY<0||targetY>7) return false;
 
     for(const Piece& other : all_pieces)
     {
         if(&other != this && other.is_alive())
         {
             if(other.gridX == targetX && other.gridY == targetY)
-                return;
+                return false;
         }
     }
     gridX = targetX;
     gridY = targetY;
     update_sprite();
+    return true;
 }
 
 void Piece::rotate_right()
@@ -54,9 +55,9 @@ void Piece::rotate_left()
     update_sprite();
 }
 
-void Piece::handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces)
+bool Piece::handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces)
 {
-        if (!is_alive()) return;
+        if (!is_alive()) return false;
 
             if (event.type == sf::Event::MouseButtonPressed)
                 {
@@ -65,25 +66,34 @@ void Piece::handle_event(const sf::Event& event, const std::vector<Piece>& all_p
                     float mouseX = static_cast<float>(event.mouseButton.x);
                     float mouseY = static_cast<float>(event.mouseButton.y);
                     check_click(mouseX, mouseY);
+                    return false;
                 }
             }
 
-            else if(event.type == sf::Event::KeyPressed)
+            else if(event.type == sf::Event::KeyPressed && is_selected())
                 {
-                    if(is_selected())
-                {// Ruch
-                if(event.key.code == sf::Keyboard::Up) {move(Direction::North,  all_pieces);selected = !selected;}
-                if(event.key.code == sf::Keyboard::Right) {move(Direction::East, all_pieces);selected = !selected;}
-                if(event.key.code == sf::Keyboard::Down) {move(Direction::South,all_pieces);selected = !selected;}
-                if(event.key.code == sf::Keyboard::Left) {move(Direction::West,all_pieces); selected = !selected;}
+                // Ruch
+                bool action_done = false;
+                if(event.key.code == sf::Keyboard::Up) action_done = move(Direction::North,  all_pieces);
+                if(event.key.code == sf::Keyboard::Right) action_done = move(Direction::East, all_pieces);
+                if(event.key.code == sf::Keyboard::Down) action_done = move(Direction::South,all_pieces);
+                if(event.key.code == sf::Keyboard::Left) action_done = move(Direction::West,all_pieces);
 
                 // Obracanie
-                if(event.key.code == sf::Keyboard::E) {rotate_right(); selected = !selected;}// Naciśnij 'E'
-                if(event.key.code == sf::Keyboard::Q) {rotate_left(); selected = !selected;} // Naciśnij 'Q'
+                if(event.key.code == sf::Keyboard::E) {rotate_right(); action_done = true;}// Naciśnij 'E'
+                if(event.key.code == sf::Keyboard::Q) {rotate_left(); action_done = true;} // Naciśnij 'Q'
 
+                if(action_done)
+                {
+                    selected = false;
+                    return true;
+                }
                 //zabicie pionka
                 if (event.key.code == sf::Keyboard::D) destroy();
-                    }}}
+                    }
+            return false; //jeśli nie wykonalismy ruchu
+
+}
 
 
 void Piece::draw(sf::RenderWindow& window) const {

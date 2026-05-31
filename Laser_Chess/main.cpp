@@ -57,22 +57,27 @@ int main()
 
     std::vector<Piece> pieces;
 
+    int turn = 0;
+
     Board board;
 
-    pieces.emplace_back(1, 0, pawn_left_red_texture);//tworzenie pionka (tymczasowe do czasu wprowadznia wielu pionków)
-    pieces.emplace_back(2,0, pawn_left_red_texture);
-    pieces.emplace_back(6,0, pawn_right_red_texture);
-    pieces.emplace_back(7,0, pawn_right_red_texture);
-    pieces.emplace_back(3,0,defender_red_texture);
-    pieces.emplace_back(5,0,defender_red_texture);
-    pieces.emplace_back(4,0,king_red_texture);
-    pieces.emplace_back(3,7,king_blue_texture);
-    pieces.emplace_back(0, 7, pawn_left_blue_texture);
-    pieces.emplace_back(1,7, pawn_left_blue_texture);
-    pieces.emplace_back(5,7, pawn_right_blue_texture);
-    pieces.emplace_back(6,7, pawn_right_blue_texture);
-    pieces.emplace_back(2,7,defender_blue_texture);
-    pieces.emplace_back(4,7,defender_blue_texture);
+    //tworzenie pionkow
+    pieces.emplace_back(1,0, Direction::South, pawn_left_red_texture, 1);
+    pieces.emplace_back(2,0, Direction::South, pawn_left_red_texture, 1);
+    pieces.emplace_back(6,0, Direction::South, pawn_right_red_texture, 1);
+    pieces.emplace_back(7,0, Direction::South, pawn_right_red_texture, 1);
+    pieces.emplace_back(3,0, Direction::South, defender_red_texture, 1);
+    pieces.emplace_back(5,0, Direction::South, defender_red_texture, 1);
+    pieces.emplace_back(4,0, Direction::South, king_red_texture, 1);
+    pieces.emplace_back(3,7, Direction::North, king_blue_texture, 0);
+    pieces.emplace_back(0,7, Direction::North, pawn_left_blue_texture, 0);
+    pieces.emplace_back(1,7, Direction::North, pawn_left_blue_texture, 0);
+    pieces.emplace_back(5,7, Direction::North, pawn_right_blue_texture, 0);
+    pieces.emplace_back(6,7, Direction::North, pawn_right_blue_texture, 0);
+    pieces.emplace_back(2,7, Direction::North, defender_blue_texture, 0);
+    pieces.emplace_back(4,7, Direction::North, defender_blue_texture, 0);
+
+
     //renderowanie okna i gry
     while (window.isOpen())
     {
@@ -84,25 +89,37 @@ int main()
             {
                 window.close();
             }
+
+            bool turn_ended = false;
+
+            //wybieranie pionka i ruch
             for(Piece& p:pieces)
             {
-                p.handle_event(event, pieces);
+                if(p.team == turn)
+                {
+                if(p.handle_event(event, pieces))
+                    {
+                        turn_ended = true;
+                }
+                }}
+            if(turn_ended)
+            {
+                turn = (turn ==0)? 1:0;
             }
-        }
 
-        window.clear();
+            window.clear();
 
-        //rysowanie planszy
-        board.draw(window);
+            //rysowanie planszy
+            board.draw(window);
+            //rysowanie pionkow
+            for(Piece& p:pieces)
+            {
+                if(p.is_alive()) p.draw(window);
+            }
 
-        for(Piece& p:pieces)
-        {
-            p.draw(window);
-        }
+            window.display();
 
-        window.display();
-
-    }
+        }}
 
     return 0;
 }

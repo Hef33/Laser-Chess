@@ -12,10 +12,11 @@ public:
     int gridX, gridY; //położenie
     bool alive;//stan życia
     bool selected = false;//stan wybrania przez gracza
+    int team; //0 - blue, 1 - red
     const sf::RenderWindow* window;
     Direction faceing_direction; //kierunek patrzenia pionka
     sf::Sprite piece_sprite;
-    Piece(int x, int y, sf::Texture& texture):gridX(x),gridY(y), faceing_direction(Direction::North), alive(true)
+    Piece(int x, int y, Direction direct, sf::Texture& texture, int t):gridX(x),gridY(y), faceing_direction(direct), team(t), alive(true)
     {
         piece_sprite.setTexture(texture);
         float texture_width = piece_sprite.getGlobalBounds().width;
@@ -46,9 +47,9 @@ public:
             selected = !selected;
     }
 
-    void handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces);
+    bool handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces);
     void update_sprite();
-    void move(Direction dir, const std::vector<Piece>& all_pieces);
+    bool move(Direction dir, const std::vector<Piece>& all_pieces);
     void rotate_right();
     void rotate_left();
 
