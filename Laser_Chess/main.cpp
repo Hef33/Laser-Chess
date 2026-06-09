@@ -5,7 +5,7 @@
 
 #include "board.h"
 #include "piece.h"
-#include "textures.cpp"
+
 
 
 int main()
