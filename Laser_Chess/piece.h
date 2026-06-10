@@ -29,22 +29,15 @@ public:
     virtual ~Piece() = default;
 
     //deklaracje funkcji
-    void destroy()
-    {
-    alive = false;
-    }
+    void destroy(){alive = false;}
 
-    bool is_alive() const
-    {
-    return alive;
-    }
+    bool is_alive() const{return alive;}
 
-    bool is_selected() const {
-        return selected;
-    }
-    void check_click(float mouseX, float mouseY) {
-        if (piece_sprite.getGlobalBounds().contains(mouseX, mouseY))
-            selected = !selected;
+    bool is_selected() const {return selected;}
+
+    void check_click(float mouseX, float mouseY)
+    {
+        if (piece_sprite.getGlobalBounds().contains(mouseX, mouseY)) selected = !selected;
     }
 
     bool handle_event(const sf::Event& event, const std::vector<Piece>& all_pieces);

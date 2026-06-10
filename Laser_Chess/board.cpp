@@ -16,7 +16,7 @@ void Board::setupTiles()
             tiles[x][y].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
             tiles[x][y].setPosition(x * TILE_SIZE, y * TILE_SIZE);
 
-            //Szachownica
+            //szachownica
             if ((x + y) % 2 == 0)
             {
                 tiles[x][y].setFillColor(sf::Color(240, 217, 181)); //Jasne pole

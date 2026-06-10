@@ -22,7 +22,7 @@ bool Piece::move(Direction dir, const std::vector<Piece>& all_pieces)
         case Direction::South: targetY += 1;break;
         case Direction::West: targetX -= 1;break;
     }
-    if(targetX<0||targetX>7||targetY<0||targetY>7) return false;
+        if(targetX<0||targetX>7||targetY<0||targetY>7||(targetY == 7 && targetX == 7)||(targetX == 0 && targetY == 0)) return false;
 
     for(const Piece& other : all_pieces)
     {

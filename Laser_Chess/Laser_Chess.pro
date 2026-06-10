@@ -5,6 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
     board.cpp \
+    laser.cpp \
         main.cpp \
     piece.cpp
 
@@ -19,4 +20,5 @@ CONFIG(debug, debug|release){
 HEADERS += \
     Global_Values.h \
     board.h \
+    laser.h \
     piece.h

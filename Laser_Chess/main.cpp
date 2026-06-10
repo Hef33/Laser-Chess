@@ -2,11 +2,9 @@
 #include <iostream>
 #include <vector>
 
-
 #include "board.h"
 #include "piece.h"
-
-
+#include "laser.h"
 
 int main()
 {
@@ -15,7 +13,7 @@ int main()
     window.setKeyRepeatEnabled(false);
     //wczytanie tekstur pionka
     sf::Texture pawn_left_blue_texture;
-    if (!pawn_left_blue_texture.loadFromFile("C:/Users/asiaa/Documents/Laser_Chess/pawn_left_blue.png"))
+    if (!pawn_left_blue_texture.loadFromFile("pawn_left_blue.png"))
     {
         std::cerr << "Blad wczytania niebieskiego pionka" << std::endl;
     }
@@ -54,18 +52,21 @@ int main()
     {
         std::cerr << "Blad wczytania czerwonego pionka" << std::endl;
     }
+    sf::Texture laser_texture;
+    if (!laser_texture.loadFromFile("C:/Users/asiaa/Documents/Laser_Chess/laser.png"))
+    {
+        std::cerr << "Blad wczytania lasera" << std::endl;
+    }
 
     std::vector<Piece> pieces;
-
     int turn = 0;
-
     Board board;
 
     //tworzenie pionkow
-    pieces.emplace_back(1,0, Direction::South, pawn_left_red_texture, 1);
-    pieces.emplace_back(2,0, Direction::South, pawn_left_red_texture, 1);
-    pieces.emplace_back(6,0, Direction::South, pawn_right_red_texture, 1);
-    pieces.emplace_back(7,0, Direction::South, pawn_right_red_texture, 1);
+    pieces.emplace_back(1,0, Direction::South, pawn_right_red_texture, 1);
+    pieces.emplace_back(2,0, Direction::South, pawn_right_red_texture, 1);
+    pieces.emplace_back(6,0, Direction::South, pawn_left_red_texture, 1);
+    pieces.emplace_back(7,0, Direction::South, pawn_left_red_texture, 1);
     pieces.emplace_back(3,0, Direction::South, defender_red_texture, 1);
     pieces.emplace_back(5,0, Direction::South, defender_red_texture, 1);
     pieces.emplace_back(4,0, Direction::South, king_red_texture, 1);
@@ -76,7 +77,8 @@ int main()
     pieces.emplace_back(6,7, Direction::North, pawn_right_blue_texture, 0);
     pieces.emplace_back(2,7, Direction::North, defender_blue_texture, 0);
     pieces.emplace_back(4,7, Direction::North, defender_blue_texture, 0);
-
+    Laser laser(0,0,Direction::North, laser_texture);
+    Laser laser2(7,7, Direction::South, laser_texture);
 
     //renderowanie okna i gry
     while (window.isOpen())
@@ -106,7 +108,6 @@ int main()
             {
                 turn = (turn ==0)? 1:0;
             }
-
             window.clear();
 
             //rysowanie planszy
@@ -116,10 +117,9 @@ int main()
             {
                 if(p.is_alive()) p.draw(window);
             }
-
+            laser.draw(window);
+            laser2.draw(window);
             window.display();
-
         }}
-
     return 0;
 }
